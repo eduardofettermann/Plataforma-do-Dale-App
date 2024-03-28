@@ -1,3 +1,5 @@
+// Navbar/styles.js
+
 import styled from "styled-components";
 import filterIMG from "../../assets/images/filter_icon.png";
 import menuIMG from "../../assets/images/menu_icon.png";
@@ -81,3 +83,10 @@ export const CloseButton = styled.button`
   font-size: 20px;
   cursor: pointer;
 `;
+
+export const SidebarItem = styled.div`
+  margin-top: 20px;
+  cursor: pointer;
+`;
+
+

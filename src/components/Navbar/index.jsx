@@ -11,6 +11,7 @@ import {
   RightMenuButton,
   Sidebar,
   CloseButton,
+  SidebarItem, 
 } from "./styles";
 
 const Navbar = ({
@@ -22,6 +23,8 @@ const Navbar = ({
   handleEnterPress,
   showRightMenu,
   toggleFilter,
+  handleHomeClick, 
+  handleStudentsClick, 
 }) => {
   return (
     <Container>
@@ -49,6 +52,8 @@ const Navbar = ({
       {isSidebarOpen && (
         <Sidebar>
           <CloseButton onClick={toggleSidebar}>X</CloseButton>
+          <SidebarItem onClick={handleHomeClick}>Home</SidebarItem> {/* Item "Home" */}
+          <SidebarItem onClick={handleStudentsClick}>Alunos</SidebarItem> {/* Item "Alunos" */}
         </Sidebar>
       )}
     </Container>

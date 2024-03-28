@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { fetchStudentData } from "./api";
 import Navbar from "../../components/Navbar";
 import Tags from "../../components/Tags/Tags";
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   ProfileInfo,
@@ -19,6 +20,17 @@ export function Profile() {
   const [studentData, setStudentData] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Novo estado
   const { studentId } = useParams();
+
+  const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
+  const handleStudentsClick = () => {
+    navigate('/students');
+  };
+
 
   useEffect(() => {
     fetchStudentData(studentId)
@@ -42,8 +54,15 @@ export function Profile() {
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         showSearchInput={false}
-        showRightMenu={false}
+        searchValue=""
+        handleSearchChange={() => {}}
+        handleEnterPress={() => {}}
+        showRightMenu={true}
+        toggleFilter={() => {}}
+        handleHomeClick={handleHomeClick}
+        handleStudentsClick={handleStudentsClick}
       />
+
       <Container>
         <ProfileInfo>
           <ProfileImage src={studentData.profilePicture} />

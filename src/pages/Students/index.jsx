@@ -58,7 +58,15 @@ export function Students() {
   }, [searchValue, gcTrailFilter, educationLevelFilter, hardSkillsFilter, softSkillsFilter]);
 
   const handleProfile = (id) => {
-    navigate(`students/profile/${id}`);
+    navigate(`/profile/${id}`);
+  };
+
+  const handleHomeClick = () => {
+    navigate('/');
+  };
+
+  const handleStudentsClick = () => {
+    navigate('/students');
   };
 
   const toggleSidebar = () => {
@@ -104,6 +112,8 @@ export function Students() {
         handleEnterPress={handleEnterPress}
         showRightMenu={true}
         toggleFilter={toggleFilter}
+        handleHomeClick={handleHomeClick}
+        handleStudentsClick={handleStudentsClick}
       />
 
       {isSidebarFilterOpen && (
