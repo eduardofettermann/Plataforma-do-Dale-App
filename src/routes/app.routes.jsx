@@ -6,6 +6,8 @@ import { Profile } from '../pages/Profile';
 
 import { Students } from '../pages/Students';
 
+import { Login } from '../pages/Login';
+
 export function AppRoutes() {
     return (
         <Routes>
@@ -16,6 +18,7 @@ export function AppRoutes() {
 
             <Route path="/" element={<Home />}/>
             
+            <Route path="login/" element={<Login />} />
             {/* <Route path="/profile/:id" element={<Profile />} /> */}
 
         </Routes>
