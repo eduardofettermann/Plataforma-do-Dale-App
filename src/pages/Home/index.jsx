@@ -1,40 +1,47 @@
-import { Container } from "./styles.js";
-import { Card } from "../../components/Card";
-import { api } from '../../services/api';
-import { useEffect } from "react";
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import { Container, Content } from "./style";
+import { useNavigate } from 'react-router-dom'; // Importe o hook useNavigate
 
 export function Home() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate(); // Obtenha a função de navegação
 
-  const [cards, setCard] = useState([]);
-  const navigate = useNavigate();
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-  function handleProfile(id) {
-      navigate(`students/profile/${id}`);
-  }
+  const handleHomeClick = () => {
+    navigate('/');
+  };
 
-  useEffect(() => {
-    async function fetchStudents() {
-      const response = await api.get('/students');
-      setCard(response.data);
-    }
-    fetchStudents();
-  }, []);
+  const handleStudentsClick = () => {
+    navigate('/students');
+  };
 
   return (
-    <Container>
-        {
-          cards.map(card => (
-            <Card
-              key={String(card.id)}
-              data={card}
-              onClick={() => handleProfile(card.id)}
-            />
-
-          ))
-
-        }
-    </Container>
-  )
+    <>
+      <Navbar
+        isSidebarOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        showSearchInput={false}
+        searchValue=""
+        handleSearchChange={() => {}}
+        handleEnterPress={() => {}}
+        showRightMenu={true}
+        toggleFilter={() => {}}
+        handleHomeClick={handleHomeClick}
+        handleStudentsClick={handleStudentsClick}
+      />
+      <Container>
+        <Content>
+          <div>
+            <h1>Encontre os melhores talentos com os nossos filtros!</h1>
+            <button onClick={handleStudentsClick}>Buscar Talentos</button> {/* Adicione um evento onClick para chamar a função handleButtonClick */}
+          </div>
+        </Content>
+      </Container>
+    </>
+  );
 }
+
