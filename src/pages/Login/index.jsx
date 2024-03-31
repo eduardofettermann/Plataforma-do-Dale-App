@@ -1,29 +1,60 @@
-import React from 'react';
+// Login.jsx
+import React, { useState } from 'react';
 import { MainContainer, Content, FormData, InputBox, Input, InputButton, Button } from './style';
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../routes/use.auth';
 
 export function Login() {
-  return (
-    <MainContainer>
-      <Content>
-        <div className="content">
-          <h1>Plataforma do Dale</h1>
-          <p className="subtitle">A plataforma de talentos</p>
-        </div>
+    const { signin, user, error } = useAuth();
+    const navigate = useNavigate();
 
-        <FormData>
-          <InputBox>
-            <Input type="login" placeholder='Digite seu login'/>
-          </InputBox>
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
 
-          <InputBox>
-            <Input type="Senha" placeholder="Digite sua senha"/>
-          </InputBox>
-          
-          <InputButton>
-            <Button>Entrar</Button>
-          </InputButton>
-        </FormData>
-      </Content>
-    </MainContainer>
-  );
+    const handleLogin = async () => {
+        try {
+            await signin(email, senha);
+            if (user) {
+                navigate('/home');
+            }
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+        }
+    };
+
+    return (
+        <MainContainer>
+            <Content>
+                <div className="content">
+                    <h1>Plataforma do Dale</h1>
+                    <p className="subtitle">A plataforma de talentos</p>
+                </div>
+
+                <FormData>
+                    <InputBox>
+                        <Input
+                            type="email"
+                            placeholder='Digite seu E-mail'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)} />
+                    </InputBox>
+
+                    <InputBox>
+                        <Input
+                            type="password"
+                            placeholder="Digite sua senha"
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)} />
+                    </InputBox>
+
+                    <InputButton>
+                        <Button type="button" onClick={handleLogin}>Entrar</Button>
+                    </InputButton>
+                </FormData>
+                {error && <p>{error}</p>}
+            </Content>
+        </MainContainer>
+    );
 }
+
+
