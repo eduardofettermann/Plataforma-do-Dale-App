@@ -62,7 +62,7 @@ export function Students() {
   };
 
   const handleHomeClick = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   const handleStudentsClick = () => {
