@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
             setUser({ email: "example@example.com" }); // Definindo um usuário fictício apenas para demonstração
         }
     }, []);
+    
 
     const signin = async (email, password) => {
         try {
