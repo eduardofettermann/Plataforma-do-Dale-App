@@ -37,7 +37,7 @@ const Navbar = ({
               value={searchValue}
               onChange={handleSearchChange}
               onKeyPress={handleEnterPress}
-              placeholder="Pesquisar"
+              placeholder="Pesquisar Nomes"
             />
           </SearchInput>
         )}
