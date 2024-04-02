@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Container, Select } from "./style";
 
 export const MultiSelect = ({
@@ -7,10 +8,53 @@ export const MultiSelect = ({
   handleHardSkillsFilterChange,
   handleSoftSkillsFilterChange,
 }) => {
+  const [hardSkills, setHardSkills] = useState([]);
+  const [softSkills, setSoftSkills] = useState([]);
   const [gcTrailValue, setGcTrailValue] = useState("");
   const [educationLevelValue, setEducationLevelValue] = useState("");
   const [hardSkillsValue, setHardSkillsValue] = useState("");
   const [softSkillsValue, setSoftSkillsValue] = useState("");
+
+  useEffect(() => {
+    const fetchHardSkills = async () => {
+      try {
+        const token = localStorage.getItem("user_token");
+        const response = await axios.get(
+          "https://api.plataformadodale.site/api/skills/hard",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const sortedSkills = response.data.map(skill => skill.description).sort();
+        setHardSkills(sortedSkills);
+      } catch (error) {
+        console.error("Error fetching hard skills:", error);
+      }
+    };
+
+    const fetchSoftSkills = async () => {
+      try {
+        const token = localStorage.getItem("user_token");
+        const response = await axios.get(
+          "https://api.plataformadodale.site/api/skills/soft",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const sortedSkills = response.data.map(skill => skill.description).sort();
+        setSoftSkills(sortedSkills);
+      } catch (error) {
+        console.error("Error fetching hard skills:", error);
+      }
+    };
+    
+    fetchHardSkills();
+    fetchSoftSkills();
+  }, []);
 
   const handleGcTrailInputChange = (event) => {
     const inputValue = event.target.value;
@@ -39,7 +83,7 @@ export const MultiSelect = ({
   return (
     <Container>
       <Select value={gcTrailValue} onChange={handleGcTrailInputChange}>
-        <option value="">Filtrar por GC Trail</option>
+        <option value="">Filtrar por Trilha</option>
         <option value="Programacão">Programação</option>
         <option value="Gestão e Vendas">Gestão e Vendas</option>
         <option value="UX/UI Design">UX/UI Design</option>
@@ -65,19 +109,25 @@ export const MultiSelect = ({
 
       <Select value={hardSkillsValue} onChange={handleHardSkillsInputChange}>
         <option value="">Filtrar por Hard Skills</option>
-        <option value="JavaScript">Javascript</option>
-        <option value="SQL">SQL</option>
-        <option value="Gestão do Tempo">Gestão do Tempo</option>
-        <option value="HTML/CSS">HTMl e CSS</option>
+        {hardSkills.map((skill) => (
+          <option key={skill} value={skill}>
+            {skill}
+          </option>
+        ))}
       </Select>
 
       <Select value={softSkillsValue} onChange={handleSoftSkillsInputChange}>
         <option value="">Filtrar por Soft Skills</option>
-        <option value="Empatia">Empatia</option>
+        {softSkills.map((skill) => (
+          <option key={skill} value={skill}>
+            {skill}
+          </option>
+        ))}
       </Select>
     </Container>
   );
 };
+
 
 
 

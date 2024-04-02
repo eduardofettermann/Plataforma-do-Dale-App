@@ -21,9 +21,9 @@ export function AppRoutes() {
     return (
         <Routes>
 
-            <Route path="profile/:studentId" element={<Profile />} />
+            <Route path="profile/:studentId" element={<Private Item={Profile} />} />
 
-            <Route path="students/" element={<Students />} />
+            <Route path="students/" element={< Private Item={Students} />} />
 
             <Route path="/home" element={<Private Item={Home} />}/>
             
