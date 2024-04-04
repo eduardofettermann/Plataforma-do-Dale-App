@@ -1,5 +1,3 @@
-// Profile/index.jsx
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchStudentData } from "./api";
@@ -115,7 +113,7 @@ export function Profile() {
         </EducationLevel>
         <Habilidades>
           <div>
-            <h3>Habilidades</h3>
+            <h3>Hard Skills</h3>
             <div>
               {studentData.hardSkills.map((skill) => (
                 <Tags key={skill.id}>{skill.description}</Tags>
@@ -125,7 +123,7 @@ export function Profile() {
         </Habilidades>
         <Competencias>
           <div>
-            <h3>Competências</h3>
+            <h3>Soft Skills</h3>
             <div>
               {studentData.softSkills.map((skill) => (
                 <Tags key={skill.id}>{skill.description}</Tags>

@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import { Container } from "./styles";
+import { Container, ContainerCard } from "./styles";
 import { Card } from "../../components/Card";
 import { MultiSelect } from "../../components/MultiSelect";
-import { api } from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 export function Students() {
   const [searchValue, setSearchValue] = useState("");
@@ -31,42 +31,65 @@ export function Students() {
   };
 
   const filterCards = () => {
-    const filtered = cards.filter((card) =>
-      card.name.toLowerCase().includes(searchValue.toLowerCase()) &&
-      card.gcTrail.toLowerCase().includes(gcTrailFilter.toLowerCase()) &&
-      card.educationLevel.toLowerCase().includes(educationLevelFilter.toLowerCase()) &&
-      card.hardSkills.some(skill => skill.description.toLowerCase().includes(hardSkillsFilter.toLowerCase())) &&
-      card.softSkills.some(skill => skill.description.toLowerCase().includes(softSkillsFilter.toLowerCase()))
+    const filtered = cards.filter(
+      (card) =>
+        card.name.toLowerCase().includes(searchValue.toLowerCase()) &&
+        card.gcTrail.toLowerCase().includes(gcTrailFilter.toLowerCase()) &&
+        card.educationLevel
+          .toLowerCase()
+          .includes(educationLevelFilter.toLowerCase()) &&
+        card.hardSkills.some((skill) =>
+          skill.description
+            .toLowerCase()
+            .includes(hardSkillsFilter.toLowerCase())
+        ) &&
+        card.softSkills.some((skill) =>
+          skill.description
+            .toLowerCase()
+            .includes(softSkillsFilter.toLowerCase())
+        )
     );
     setFilteredCards(filtered);
   };
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get('/students');
+      const response = await api.get("/students");
       setCards(response.data);
     }
     fetchData();
   }, []);
 
   useEffect(() => {
-    if (searchValue.trim() === "" && gcTrailFilter.trim() === "" && educationLevelFilter.trim() === "" && hardSkillsFilter.trim() === "" && softSkillsFilter.trim() === "") {
+    if (
+      searchValue.trim() === "" &&
+      gcTrailFilter.trim() === "" &&
+      educationLevelFilter.trim() === "" &&
+      hardSkillsFilter.trim() === "" &&
+      softSkillsFilter.trim() === ""
+    ) {
       setFilteredCards([]);
     } else {
       filterCards();
     }
-  }, [searchValue, gcTrailFilter, educationLevelFilter, hardSkillsFilter, softSkillsFilter]);
+  }, [
+    searchValue,
+    gcTrailFilter,
+    educationLevelFilter,
+    hardSkillsFilter,
+    softSkillsFilter,
+  ]);
 
   const handleProfile = (id) => {
     navigate(`/profile/${id}`);
   };
 
   const handleHomeClick = () => {
-    navigate('/home');
+    navigate("/home");
   };
 
   const handleStudentsClick = () => {
-    navigate('/students');
+    navigate("/students");
   };
 
   const toggleSidebar = () => {
@@ -117,47 +140,37 @@ export function Students() {
       />
 
       {isSidebarFilterOpen && (
-        <MultiSelect 
-          handleGcTrailFilterChange={handleGcTrailFilterChange} 
+        <MultiSelect
+          handleGcTrailFilterChange={handleGcTrailFilterChange}
           handleEducationLevelFilterChange={handleEducationLevelFilterChange}
           handleHardSkillsFilterChange={handleHardSkillsFilterChange}
           handleSoftSkillsFilterChange={handleSoftSkillsFilterChange}
         />
       )}
 
-      {searchValue.trim() === "" && gcTrailFilter.trim() === "" && educationLevelFilter.trim() === "" && hardSkillsFilter.trim() === "" && softSkillsFilter.trim() === "" ? (
-        cards.map((card) => (
-          <Card
-            key={String(card.id)}
-            data={card}
-            hardSkills={card.hardSkills}
-            softSkills={card.softSkills}
-            onClick={() => handleProfile(card.id)}
-          />
-        ))
-      ) : (
-        filteredCards.map((card) => (
-          <Card
-            key={String(card.id)}
-            data={card}
-            onClick={() => handleProfile(card.id)}
-          />
-        ))
-      )}
+      <ContainerCard>
+        {searchValue.trim() === "" &&
+        gcTrailFilter.trim() === "" &&
+        educationLevelFilter.trim() === "" &&
+        hardSkillsFilter.trim() === "" &&
+        softSkillsFilter.trim() === ""
+          ? cards.map((card) => (
+              <Card
+                key={String(card.id)}
+                data={card}
+                hardSkills={card.hardSkills}
+                softSkills={card.softSkills}
+                onClick={() => handleProfile(card.id)}
+              />
+            ))
+          : filteredCards.map((card) => (
+              <Card
+                key={String(card.id)}
+                data={card}
+                onClick={() => handleProfile(card.id)}
+              />
+            ))}
+      </ContainerCard>
     </Container>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
