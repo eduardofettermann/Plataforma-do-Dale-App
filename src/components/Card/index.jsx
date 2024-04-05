@@ -1,29 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "./styles";
-import {
-  PiStarFourFill,
-  PiLinkedinLogo,
-  PiHeart,
-  PiHeartFill,
-} from "react-icons/pi";
+import { PiStarFourFill, PiLinkedinLogo, PiHeart, PiHeartFill } from "react-icons/pi";
 import { Tag } from "../../components/Tag";
 import { useNavigate } from "react-router-dom";
 
 export function Card({ data, onClick }) {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(data.favorited);
+
   const handleProfileClick = () => {
     onClick(data.id);
   };
 
-  const handleFavoriteProfile = (e) => {
+  const toggleFavoriteProfile = async (e) => {
     e.stopPropagation(); // Evita a propagação do evento de clique para o card quando clicar no botão de favorito
-    setIsFavorite(!isFavorite);
+    
+    try {
+      const token = localStorage.getItem("user_token");
+      const favoriteEndpoint = `https://api.plataformadodale.site/api/recruiters/add-remove-favorite-student?student=${data.id}`;
+      
+      const response = await fetch(favoriteEndpoint, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setIsFavorite(!isFavorite); // Alterna o estado de favorito com base na resposta da requisição
+      } else {
+        console.error("Failed to toggle favorite:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
   };
 
   return (
     <Container onClick={handleProfileClick}>
-      <button className="fav-btn" onClick={handleFavoriteProfile}>
+      <button className="fav-btn" onClick={toggleFavoriteProfile}>
         {isFavorite ? (
           <PiHeartFill size={20} color="red" />
         ) : (
