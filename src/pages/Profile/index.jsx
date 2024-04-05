@@ -55,7 +55,7 @@ export function Profile() {
         searchValue=""
         handleSearchChange={() => {}}
         handleEnterPress={() => {}}
-        showRightMenu={true}
+        showRightMenu={false}
         toggleFilter={() => {}}
         handleHomeClick={handleHomeClick}
         handleStudentsClick={handleStudentsClick}
