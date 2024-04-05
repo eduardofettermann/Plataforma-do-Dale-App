@@ -28,7 +28,7 @@ export function Home() {
         searchValue=""
         handleSearchChange={() => {}}
         handleEnterPress={() => {}}
-        showRightMenu={true}
+        showRightMenu={false}
         toggleFilter={() => {}}
         handleHomeClick={handleHomeClick}
         handleStudentsClick={handleStudentsClick}
