@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import font from '../../styles/fonts';
+
+const fontFamily = font.FONTS;
 
 export const MainContainer = styled.main`
     position: fixed;
@@ -15,7 +18,7 @@ export const Content = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: "Video-Medium", Video-MediuM;
+    font-family: ${fontFamily.FONT_100};
     font-size: 18px;
     text-align: center;
 
