@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Select } from "./style";
+import makeAnimated from "react-select/animated";
+import { Container, CustomSelect } from "./style";
+import { PiNutFill } from "react-icons/pi";
+
+const animatedComponents = makeAnimated();
 
 export const MultiSelect = ({
   handleGcTrailFilterChange,
@@ -10,123 +14,115 @@ export const MultiSelect = ({
 }) => {
   const [hardSkills, setHardSkills] = useState([]);
   const [softSkills, setSoftSkills] = useState([]);
-  const [gcTrailValue, setGcTrailValue] = useState("");
-  const [educationLevelValue, setEducationLevelValue] = useState("");
-  const [hardSkillsValue, setHardSkillsValue] = useState("");
-  const [softSkillsValue, setSoftSkillsValue] = useState("");
-
+  const [selectedGcTrail, setSelectedGcTrail] = useState(null);
+  const [selectedEducationLevel, setSelectedEducationLevel] = useState(null);
+  const [selectedHardSkills, setSelectedHardSkills] = useState([]);
+  const [selectedSoftSkills, setSelectedSoftSkills] = useState([]);
+  
   useEffect(() => {
-    const fetchHardSkills = async () => {
+    const fetchSkills = async () => {
       try {
-        const token = localStorage.getItem("user_token");
-        const response = await axios.get(
-          "https://api.plataformadodale.site/api/skills/hard",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const hardSkillsResponse = await axios.get(
+          "https://api.plataformadodale.site/api/skills/hard"
         );
-        const sortedSkills = response.data.map(skill => skill.description).sort();
-        setHardSkills(sortedSkills);
+        const softSkillsResponse = await axios.get(
+          "https://api.plataformadodale.site/api/skills/soft"
+        );
+
+        const sortedHardSkills = hardSkillsResponse.data
+          .map((skill) => skill.description)
+          .sort();
+
+        const sortedSoftSkills = softSkillsResponse.data
+          .map((skill) => skill.description)
+          .sort();
+
+        setHardSkills(sortedHardSkills);
+        setSoftSkills(sortedSoftSkills);
       } catch (error) {
-        console.error("Error fetching hard skills:", error);
+        console.error("Error fetching skills:", error);
       }
     };
 
-    const fetchSoftSkills = async () => {
-      try {
-        const token = localStorage.getItem("user_token");
-        const response = await axios.get(
-          "https://api.plataformadodale.site/api/skills/soft",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const sortedSkills = response.data.map(skill => skill.description).sort();
-        setSoftSkills(sortedSkills);
-      } catch (error) {
-        console.error("Error fetching hard skills:", error);
-      }
-    };
-    
-    fetchHardSkills();
-    fetchSoftSkills();
+    fetchSkills();
   }, []);
 
-  const handleGcTrailInputChange = (event) => {
-    const inputValue = event.target.value;
-    setGcTrailValue(inputValue);
-    handleGcTrailFilterChange(inputValue.trim());
+  const handleGcTrailInputChange = (selectedOption) => {
+    setSelectedGcTrail(selectedOption.value);
+    handleGcTrailFilterChange(selectedOption.value);
   };
 
-  const handleEducationLevelInputChange = (event) => {
-    const inputValue = event.target.value;
-    setEducationLevelValue(inputValue);
-    handleEducationLevelFilterChange(inputValue.trim());
-  };
-
-  const handleHardSkillsInputChange = (event) => {
-    const inputValue = event.target.value;
-    setHardSkillsValue(inputValue);
-    handleHardSkillsFilterChange(inputValue.trim());
-  };
-
-  const handleSoftSkillsInputChange = (event) => {
-    const inputValue = event.target.value;
-    setSoftSkillsValue(inputValue);
-    handleSoftSkillsFilterChange(inputValue.trim());
+  const handleEducationLevelInputChange = (selectedOption) => {
+    setSelectedEducationLevel(selectedOption.value);
+    handleEducationLevelFilterChange(selectedOption.value);
   };
 
   return (
     <Container>
-      <Select value={gcTrailValue} onChange={handleGcTrailInputChange}>
-        <option value="">Filtrar por Trilha</option>
-        <option value="Programacão">Programação</option>
-        <option value="Gestão e Vendas">Gestão e Vendas</option>
-        <option value="UX/UI Design">UX/UI Design</option>
-        <option value="Marketing Digital">Marketing Digital</option>
-      </Select>
+      <CustomSelect
+  placeholder="Filtrar por Trilha"
+  value={selectedGcTrail ? { value: selectedGcTrail, label: selectedGcTrail } : null}
+  onChange={handleGcTrailInputChange}
+  options={[
+    { value: "", label: "Filtrar por Trilha" },
+    { value: "Programacão", label: "Programação" },
+    { value: "Gestão e Vendas", label: "Gestão e Vendas" },
+    { value: "UX/UI Design", label: "UX/UI Design" },
+    { value: "Marketing Digital", label: "Marketing Digital" }
+  ]}
+/>
 
-      <Select
-        value={educationLevelValue}
-        onChange={handleEducationLevelInputChange}
-      >
-        <option value="">Filtrar por Nível de Educação</option>
-        <option value="Ensino Médio em andamento">
-          Ensino Médio em andamento
-        </option>
-        <option value="Ensino Médio completo">Ensino Médio completo</option>
-        <option value="Ensino Superior em andamento">
-          Ensino Superior em andamento
-        </option>
-        <option value="Ensino Superior completo">
-          Ensino Superior completo
-        </option>
-      </Select>
+<CustomSelect
+  placeholder="Filtrar por Nível de Educação"
+  value={selectedEducationLevel ? { value: selectedEducationLevel, label: selectedEducationLevel } : null}
+  onChange={handleEducationLevelInputChange}
+  options={[
+    { value: "", label: "Filtrar por Nível de Educação" },
+    { value: "Ensino Médio em andamento", label: "Ensino Médio em andamento" },
+    { value: "Ensino Médio completo", label: "Ensino Médio completo" },
+    { value: "Ensino Superior em andamento", label: "Ensino Superior em andamento" },
+    { value: "Ensino Superior completo", label: "Ensino Superior completo" }
+  ]}
+/>
 
-      <Select value={hardSkillsValue} onChange={handleHardSkillsInputChange}>
-        <option value="">Filtrar por Hard Skills</option>
-        {hardSkills.map((skill) => (
-          <option key={skill} value={skill}>
-            {skill}
-          </option>
-        ))}
-      </Select>
 
-      <Select value={softSkillsValue} onChange={handleSoftSkillsInputChange}>
-        <option value="">Filtrar por Soft Skills</option>
-        {softSkills.map((skill) => (
-          <option key={skill} value={skill}>
-            {skill}
-          </option>
-        ))}
-      </Select>
+      <CustomSelect
+        placeholder="Filtrar por Hard Skills"
+        components={animatedComponents}
+        isMulti
+        onChange={(items) => {
+          setSelectedHardSkills(items);
+          handleHardSkillsFilterChange(items.map((item) => item.value));
+        }}
+        options={hardSkills.map((skill) => ({
+          value: skill,
+          label: skill,
+        }))}
+      />
+
+      <CustomSelect
+        placeholder="Filtrar por Soft Skills"
+        components={animatedComponents}
+        isMulti
+        onChange={(items) => {
+          setSelectedSoftSkills(items);
+          handleSoftSkillsFilterChange(items.map((item) => item.value));
+        }}
+        options={softSkills.map((skill) => ({
+          value: skill,
+          label: skill,
+        }))}
+      />
     </Container>
   );
 };
+
+
+
+
+
+
+
 
 
 

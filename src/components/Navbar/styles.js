@@ -3,6 +3,9 @@
 import styled from "styled-components";
 import filterIMG from "../../assets/images/filter_icon.png";
 import menuIMG from "../../assets/images/menu_icon.png";
+import font from "../../styles/fonts";
+
+const fontFamily = font.FONTS;
 
 export const Container = styled.nav`
   background-color: black;
@@ -40,9 +43,9 @@ export const Input = styled.input`
 export const MenuButton = styled.button`
   background-color: transparent;
   border: none;
-  width: 30px;
-  height: 30px;
-  margin-right: 40px;
+  width: 20px;
+  height: 20px;
+  margin-right: 55px;
   background-image: url(${menuIMG});
   background-repeat: no-repeat;
   background-size: cover;
@@ -53,13 +56,13 @@ export const MenuButton = styled.button`
 export const RightMenuButton = styled.button`
   background-color: transparent;
   border: none;
-  width: 30px;
-  height: 30px;
-  margin-left: 20px;
+  width: 20px;
+  height: 20px;
   background-image: url(${filterIMG});
   background-repeat: no-repeat;
   background-size: cover;
   cursor: pointer;
+  flex-shrink: 0; /* Não encolhe */
 `;
 
 export const Sidebar = styled.div`
@@ -71,6 +74,8 @@ export const Sidebar = styled.div`
   background-color: black;
   color: white;
   padding: 20px;
+  z-index: 1000;
+  font-family: ${fontFamily.FONT_100};
 `;
 
 export const CloseButton = styled.button`

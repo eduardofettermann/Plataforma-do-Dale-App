@@ -26,7 +26,7 @@ export function Login() {
         <MainContainer>
             <Content>
                 <div className="content">
-                    <h1>Plataforma do Dale</h1>
+                    <h1>GC Talentos</h1>
                     <p className="subtitle">A plataforma de talentos</p>
                 </div>
 

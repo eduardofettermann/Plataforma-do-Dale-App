@@ -37,6 +37,19 @@ export function Card({ data, onClick }) {
     }
   };
 
+  // Separar o nome completo em partes
+  const fullNameParts = data.name.split(" ");
+  // Pegar apenas os três primeiros nomes
+  let firstName = fullNameParts[0];
+  let secondName = fullNameParts[1];
+  let thirdName = fullNameParts[2];
+  let fourthName = '';
+  // Verificar se o terceiro nome tem três letras ou menos
+  if (thirdName && thirdName.length <= 3) {
+    // Se tiver, adicionar o quarto nome
+    fourthName = fullNameParts[3] ? fullNameParts[3] : '';
+  }
+
   return (
     <Container onClick={handleProfileClick}>
       <button className="fav-btn" onClick={toggleFavoriteProfile}>
@@ -49,7 +62,8 @@ export function Card({ data, onClick }) {
 
       <img src={data.profilePicture} alt="" />
       <div className="name-age">
-        <h1 id="name">{data.name}</h1>
+        {/* Mostrar até quatro nomes, mas apenas se o terceiro tiver três letras ou menos */}
+        <h1 id="name">{firstName} {secondName} {thirdName} {fourthName}</h1>
         <p id="age">, {data.age}</p>
       </div>
       <p id="city">{data.city}</p>
@@ -67,3 +81,8 @@ export function Card({ data, onClick }) {
     </Container>
   );
 }
+
+
+
+
+
