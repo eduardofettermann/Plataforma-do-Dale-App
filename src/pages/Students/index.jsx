@@ -46,9 +46,26 @@ export function Students() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get("/students");
-      setCards(response.data);
+      try {
+        const token = localStorage.getItem("user_token"); // Obtém o token do localStorage
+        const response = await api.get("recruiters/students", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho de autorização
+          },
+        });
+  
+        // Ordena os alunos com base na propriedade 'favorited'
+        const sortedStudentsByFavorited = response.data.sort((a, b) => {
+          // Alunos com 'favorited' true devem vir primeiro
+          return b.favorited - a.favorited;
+        });
+  
+        setCards(sortedStudentsByFavorited);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      }
     }
+  
     fetchData();
   }, []);
 
