@@ -1,77 +1,69 @@
+import React, { useState, useEffect } from "react";
 import { Container } from "./styles";
-import { PiStarFourFill, PiLinkedinLogo,   } from "react-icons/pi";
+import { PiStarFourFill, PiLinkedinLogo, PiHeart, PiHeartFill } from "react-icons/pi";
 import { Tag } from "../../components/Tag";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import { useEffect } from "react";
-import { useState } from 'react';
+export function Card({ data, onClick }) {
+  const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(data.favorited);
 
-export function Card({ data, onClick, ...rest}) {
+  const handleProfileClick = () => {
+    onClick(data.id);
+  };
 
+  const toggleFavoriteProfile = async (e) => {
+    e.stopPropagation(); // Evita a propagação do evento de clique para o card quando clicar no botão de favorito
+    
+    try {
+      const token = localStorage.getItem("user_token");
+      const favoriteEndpoint = `https://api.plataformadodale.site/api/recruiters/add-remove-favorite-student?student=${data.id}`;
+      
+      const response = await fetch(favoriteEndpoint, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-    // useEffect(() => {
-        
-    //     // async function fetchStudents() {
-    //     //     const response = await api.get(`/studenrs?title=${search}&tags=${tagsSelected}`);
-    //     //     setNotes(response.data);
-    //     // }
+      if (response.ok) {
+        setIsFavorite(!isFavorite); // Alterna o estado de favorito com base na resposta da requisição
+      } else {
+        console.error("Failed to toggle favorite:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
 
-    //     fetchNotes();
+  return (
+    <Container onClick={handleProfileClick}>
+      <button className="fav-btn" onClick={toggleFavoriteProfile}>
+        {isFavorite ? (
+          <PiHeartFill size={20} color="red" />
+        ) : (
+          <PiHeart size={20} color="red" />
+        )}
+      </button>
 
-
-    return (
-        <Container onClick={onClick}>
-            {/* <div className="icons">
-                <PiStarFourFill />
-            </div> */}
-
-            <img src={data.profilePicture} alt="" />
-
-            <div className="name-age">
-                {/* <h1 id="name">Davi Kraieski da Silva Sauro</h1><p id="age">, 21</p> */}
-                <h1 id="name">{data.name}</h1><p id="age">, {data.age}</p>
-            
-            
-            </div>
-            {/* <p id="city">Porto Alegre, RS</p> */}
-            <p id="city">{data.city}</p>
-
-            <div className="education">
-                <p id="gc-trail">{data.gcTrail}</p>
-                <p id="education-level">{data.educationLevel}</p>
-                <p id="course">{data.courseInstitution}</p>
-                <p id="course-completion">{data.yearOfCourseCompletion}</p>
-            </div>
-
-            {/* <div className="tags-container">
-                <p>Habilidades</p>
-
-                    { 
-                        data.tags.map(tag => <Tag key={tag.id} title={tag.name} />) 
-                    }
-
-                        {/* <Tag title="Marketing de conteúdo" />
-                        <Tag title="Conhecimento em ferramentas de design (Adobe XD, Sketch, Figma)" />
-                        
-
-            </div>
-             
-            <div className="tags-container">
-                <p>Competências</p>
-
-                    { 
-                        data.tags.map(tag => <Tag key={tag.id} title={tag.name} />) 
-                    }
- 
-            </div>
-            */}
-
-            <div className="links">
-                <a href={data.linkedin} target="_blank">
-                    <PiLinkedinLogo />
-                </a>
-            </div>
-
-        </Container>
-    );
+      <img src={data.profilePicture} alt="" />
+      <div className="name-age">
+        <h1 id="name">{data.name}</h1>
+        <p id="age">, {data.age}</p>
+      </div>
+      <p id="city">{data.city}</p>
+      <div className="education">
+        <p id="gc-trail">{data.gcTrail}</p>
+        <p id="education-level">{data.educationLevel}</p>
+        <p id="course">{data.courseInstitution}</p>
+        <p id="course-completion">{data.yearOfCourseCompletion}</p>
+      </div>
+      <div className="links">
+        <a href={data.linkedin} target="_blank" rel="noopener noreferrer">
+          <PiLinkedinLogo />
+        </a>
+      </div>
+    </Container>
+  );
 }
