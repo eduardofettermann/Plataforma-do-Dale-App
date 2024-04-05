@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ export const Container = styled.div`
   padding: 1.6rem;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND_300};
 
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 
   border-radius: 1.6rem;
   border-style: solid;
@@ -48,6 +48,7 @@ export const Container = styled.div`
       display: flex;
       font-size: 1.6rem;
       color: ${({ theme }) => theme.COLORS.WHITE};
+      text-transform: capitalize;
     }
   }
 
