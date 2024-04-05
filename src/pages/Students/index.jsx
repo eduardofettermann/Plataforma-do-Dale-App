@@ -1,5 +1,3 @@
-// index.jsx da página Home
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import { Container, ContainerCard } from "./styles";
@@ -10,10 +8,12 @@ import { useNavigate } from "react-router-dom";
 
 export function Students() {
   const [searchValue, setSearchValue] = useState("");
-  const [gcTrailFilter, setGcTrailFilter] = useState("");
-  const [educationLevelFilter, setEducationLevelFilter] = useState("");
-  const [hardSkillsFilter, setHardSkillsFilter] = useState("");
-  const [softSkillsFilter, setSoftSkillsFilter] = useState("");
+  const [filters, setFilters] = useState({
+    gcTrail: "",
+    educationLevel: "",
+    hardSkills: [],
+    softSkills: [],
+  });
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -31,24 +31,16 @@ export function Students() {
   };
 
   const filterCards = () => {
-    const filtered = cards.filter(
-      (card) =>
+    const filtered = cards.filter((card) => {
+      const { gcTrail, educationLevel, hardSkills, softSkills } = filters;
+      return (
         card.name.toLowerCase().includes(searchValue.toLowerCase()) &&
-        card.gcTrail.toLowerCase().includes(gcTrailFilter.toLowerCase()) &&
-        card.educationLevel
-          .toLowerCase()
-          .includes(educationLevelFilter.toLowerCase()) &&
-        card.hardSkills.some((skill) =>
-          skill.description
-            .toLowerCase()
-            .includes(hardSkillsFilter.toLowerCase())
-        ) &&
-        card.softSkills.some((skill) =>
-          skill.description
-            .toLowerCase()
-            .includes(softSkillsFilter.toLowerCase())
-        )
-    );
+        (gcTrail === "" || card.gcTrail.toLowerCase() === gcTrail.toLowerCase()) &&
+        (educationLevel === "" || card.educationLevel.toLowerCase() === educationLevel.toLowerCase()) &&
+        (hardSkills.length === 0 || hardSkills.some((skill) => card.hardSkills.map(s => s.description.toLowerCase()).includes(skill.toLowerCase()))) &&
+        (softSkills.length === 0 || softSkills.some((skill) => card.softSkills.map(s => s.description.toLowerCase()).includes(skill.toLowerCase())))
+      );
+    });
     setFilteredCards(filtered);
   };
 
@@ -63,22 +55,16 @@ export function Students() {
   useEffect(() => {
     if (
       searchValue.trim() === "" &&
-      gcTrailFilter.trim() === "" &&
-      educationLevelFilter.trim() === "" &&
-      hardSkillsFilter.trim() === "" &&
-      softSkillsFilter.trim() === ""
+      filters.gcTrail === "" &&
+      filters.educationLevel === "" &&
+      filters.hardSkills.length === 0 &&
+      filters.softSkills.length === 0
     ) {
       setFilteredCards([]);
     } else {
       filterCards();
     }
-  }, [
-    searchValue,
-    gcTrailFilter,
-    educationLevelFilter,
-    hardSkillsFilter,
-    softSkillsFilter,
-  ]);
+  }, [searchValue, filters]);
 
   const handleProfile = (id) => {
     navigate(`/profile/${id}`);
@@ -108,20 +94,8 @@ export function Students() {
     setIsSidebarFilterOpen(false);
   };
 
-  const handleGcTrailFilterChange = (gcTrailFilter) => {
-    setGcTrailFilter(gcTrailFilter);
-  };
-
-  const handleEducationLevelFilterChange = (educationLevelFilter) => {
-    setEducationLevelFilter(educationLevelFilter);
-  };
-
-  const handleHardSkillsFilterChange = (hardSkillsFilter) => {
-    setHardSkillsFilter(hardSkillsFilter);
-  };
-
-  const handleSoftSkillsFilterChange = (softSkillsFilter) => {
-    setSoftSkillsFilter(softSkillsFilter);
+  const handleFilterChange = (updatedFilters) => {
+    setFilters(updatedFilters);
   };
 
   return (
@@ -141,19 +115,20 @@ export function Students() {
 
       {isSidebarFilterOpen && (
         <MultiSelect
-          handleGcTrailFilterChange={handleGcTrailFilterChange}
-          handleEducationLevelFilterChange={handleEducationLevelFilterChange}
-          handleHardSkillsFilterChange={handleHardSkillsFilterChange}
-          handleSoftSkillsFilterChange={handleSoftSkillsFilterChange}
+          handleGcTrailFilterChange={(gcTrail) => handleFilterChange({ ...filters, gcTrail })}
+          handleEducationLevelFilterChange={(educationLevel) => handleFilterChange({ ...filters, educationLevel })}
+          handleHardSkillsFilterChange={(hardSkills) => handleFilterChange({ ...filters, hardSkills })}
+          handleSoftSkillsFilterChange={(softSkills) => handleFilterChange({ ...filters, softSkills })}
+          filters={filters}
         />
       )}
 
       <ContainerCard>
         {searchValue.trim() === "" &&
-        gcTrailFilter.trim() === "" &&
-        educationLevelFilter.trim() === "" &&
-        hardSkillsFilter.trim() === "" &&
-        softSkillsFilter.trim() === ""
+        filters.gcTrail === "" &&
+        filters.educationLevel === "" &&
+        filters.hardSkills.length === 0 &&
+        filters.softSkills.length === 0
           ? cards.map((card) => (
               <Card
                 key={String(card.id)}
@@ -174,3 +149,4 @@ export function Students() {
     </Container>
   );
 }
+
