@@ -24,7 +24,11 @@ export const Content = styled.div`
 
   .subtitle {
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 1rem;
+  }
+
+  .subtitle p:first-of-type {
+    margin-bottom: 4px;
   }
 `;
 

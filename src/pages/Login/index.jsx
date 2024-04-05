@@ -36,8 +36,10 @@ export function Login() {
         <div className='content'>
           <img src={diaDTrampoLogo} alt='Dia D Trampo' width={240} />
 
-          <h1 className='title'>GC Talentos</h1>
-          <p className='subtitle'>A plataforma de talentos</p>
+          <div className='subtitle'>
+            <p>A Plataforma de Talentos</p>
+            <p>do Programa Geração Caldeira</p>
+          </div>
         </div>
 
         <FormData>
